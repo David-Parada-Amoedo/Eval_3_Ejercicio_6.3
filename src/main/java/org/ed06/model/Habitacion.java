@@ -1,5 +1,8 @@
 package org.ed06.model;
-
+/**
+ * Clase que representa una habitación en el hotel.
+ * Contiene información sobre el tipo de habitación, su precio y disponibilidad.
+ */
 public class Habitacion {
     private int numero;
     private String tipo; // "SIMPLE", "DOBLE", "SUITE"
@@ -7,7 +10,12 @@ public class Habitacion {
 
     //Todo pendiente cambiar la forma de gestionar la disponibilidad en base a las fechas de las reservas
     private boolean disponible;
-
+    /**
+     * Constructor que inicializa una habitación con los datos proporcionados.
+     * @param numero Número identificador de la habitación.
+     * @param tipo Tipo de habitación.
+     * @param precioBase Precio base de la habitación por noche.
+     */
     public Habitacion(int numero, String tipo, double precioBase) {
         this.numero = numero;
         this.tipo = tipo;
@@ -31,8 +39,11 @@ public class Habitacion {
         return disponible;
     }
 
-    // Método que usa un switch para determinar el número máximo de huéspedes
-    public double obtenerNumMaxHuespedes() {
+    /**
+     * Determina el número máximo de huéspedes según el tipo de habitación.
+     * @return Número máximo de huéspedes permitidos en la habitación.
+     */
+    public int obtenerNumMaxHuespedes() {
         return switch (tipo) {
             case "SIMPLE" -> 1;
             case "DOBLE" -> 3;
@@ -41,7 +52,10 @@ public class Habitacion {
             default -> 1;
         };
     }
-
+    /**
+     * Marca la habitación como reservada.
+     * Si ya estaba reservada, muestra un mensaje en la consola.
+     */
     public void reservar() {
         if (disponible) {
             System.out.println("Habitación #" + numero + " ya reservada");

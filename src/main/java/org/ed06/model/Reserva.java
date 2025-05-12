@@ -1,8 +1,12 @@
 package org.ed06.model;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.temporal.ChronoUnit;
 
+/**
+ * Clase que representa una reserva en el hotel.
+ * Contiene información sobre el cliente, la habitación, las fechas de la reserva y el precio final.
+ */
 public class Reserva {
     private int id;
     private Habitacion habitacion;
@@ -10,7 +14,14 @@ public class Reserva {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
     private double precioTotal;
-
+    /**
+     * Constructor que inicializa una reserva con los datos proporcionados.
+     * @param id Identificador único de la reserva.
+     * @param habitacion Habitación reservada.
+     * @param cliente Cliente que realiza la reserva.
+     * @param fechaInicio Fecha de inicio de la reserva.
+     * @param fechaFin Fecha de fin de la reserva.
+     */
     public Reserva(int id, Habitacion habitacion, Cliente cliente, LocalDate fechaInicio, LocalDate fechaFin) {
         this.id = id;
         this.habitacion = habitacion;
@@ -44,30 +55,35 @@ public class Reserva {
         return precioTotal;
     }
 
-    // Calcula el precio total de la reserva. Para calcular el precio total, se debe calcular el precio base de la habitación por el número de noches de la reserva. En el caso de que el cliente sea vip, se aplicará un descuento del 10%. Además, si el intervalo de fechas es mayor a 7 días, se aplicará un descuento adicional del 5%.
-    // Devuelve precio total de la reserva
+    /**
+     * Calcula el precio total de la reserva.
+     * El precio base de la habitación se multiplica por el número de noches reservadas.
+     * Se aplican descuentos si el cliente es VIP (10%) o si la estancia supera los 7 días (5% adicional).
+     * @return Precio total de la reserva.
+     */
+
     public double calcularPrecioFinal() {
         //calculamos los días de la reserva
-        int n = fechaFin.getDayOfYear() - fechaInicio.getDayOfYear();
+        double numeroDeDias = ChronoUnit.DAYS.between(fechaInicio, fechaFin);
         // Calculamos el precio base de la habitación por el número de noches de la reserva
-        double pb = habitacion.getPrecioBase() * n;
-        // Declaramos la variable para almacenar el precio final
-        double pf = pb;
+        double precioFinal = habitacion.getPrecioBase() * numeroDeDias;
 
         // Si el cliente es VIP, aplicamos un descuento del 10%
         if (cliente.esVip) {
-            pf *= 0.9;
+            precioFinal *= 0.9;
         }
 
         // Si el intervalo de fechas es mayor a 7 días, aplicamos un descuento adicional del 5%
-        if (n > 7) {
-            pf *= 0.95;
+        if (numeroDeDias > 7) {
+            precioFinal *= 0.95;
         }
 
         // Devolvemos el precio final
-        return pf;
+        return precioFinal;
     }
-
+    /**
+     * Muestra la información de la reserva en la consola.
+     */
     public void mostrarReserva() {
         System.out.println("Reserva #" + id);
         System.out.println("Habitación #" + habitacion.getNumero() + " - Tipo: " + habitacion.getTipo() + " - Precio base: " + habitacion.getPrecioBase());
